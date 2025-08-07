@@ -1,3 +1,4 @@
+import { useTheme } from "@/theme/ThemeProvider";
 import React, { useState } from "react";
 import {
   MapPin, Landmark, IndianRupee, Search, Home,
