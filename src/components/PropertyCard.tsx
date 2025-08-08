@@ -54,9 +54,15 @@ const PropertyCard = (props: PropertyCardProps) => {
         <div className="mb-1"><b>Auction End:</b> {props.auction_close_date || "TBA"}</div>
       </div>
       <div className="p-6 pt-0 flex gap-2">
-        <Button onClick={() => { setOpen(true); console.log('Open:', open); }}>
-          View Details
-        </Button>
+       <Button 
+  variant="outline"
+  className="w-full"
+  size="sm"
+  onClick={() => setOpen(true)}
+>
+  View Details
+</Button>
+
         <Button variant="outline" size="sm" className="px-3" onClick={() => window.open('tel:1800123456')}>
           <Phone className="w-4 h-4" />
         </Button>
