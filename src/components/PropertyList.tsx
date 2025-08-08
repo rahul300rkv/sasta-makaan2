@@ -11,6 +11,32 @@ function parseRupee(str = "") {
   const num = parseFloat(cleaned);
   return isNaN(num) ? 0 : Math.round(num);
 }
+interface Property {
+  property_id: string;
+  bank_name: string;
+  branch_name?: string;
+  property_type?: string;
+  reserve_price_rs: string;
+  emd_rs: string;
+  emd_last_date?: string;
+  auction_open_date?: string;
+  auction_close_date?: string;
+  city: string;
+  district: string;
+  state: string;
+  borrower_name?: string;
+  owner_name?: string;
+  ownership_type?: string;
+  summary_description?: string;
+  property_sub_type?: string;
+  type_of_title_deed?: string;
+  status_of_possession?: string;
+  sealed_bid_last_date?: string;
+  sealed_bid_extended_date?: string;
+  address?: string;
+  nearest_airport_railway_bus?: string;
+  authorised_officer_detail?: string;
+}
 
 const PropertyList: React.FC = () => {
   const [properties, setProperties] = useState<Property[]>([]);
