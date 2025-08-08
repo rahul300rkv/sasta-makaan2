@@ -33,52 +33,25 @@ interface PropertyCardProps {
 const PropertyCard = (props: PropertyCardProps) => {
   const [open, setOpen] = useState(false);
 
-  const {
-    property_id,
-    bank_name,
-    branch_name,
-    property_type,
-    reserve_price_rs,
-    emd_rs,
-    emd_last_date,
-    auction_open_date,
-    auction_close_date,
-    city,
-    district,
-    state,
-    borrower_name,
-    owner_name,
-    ownership_type,
-    summary_description,
-    property_sub_type,
-    type_of_title_deed,
-    status_of_possession,
-    sealed_bid_last_date,
-    sealed_bid_extended_date,
-    address,
-    nearest_airport_railway_bus,
-    authorised_officer_detail,
-  } = props;
-
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border flex flex-col justify-between min-h-[320px]">
       <div className="p-6 flex-1">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <Building className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">{bank_name}</span>
+            <span className="text-sm font-medium text-primary">{props.bank_name}</span>
           </div>
         </div>
-        <h3 className="text-lg font-semibold text-neutral-900 mb-2 line-clamp-2">{property_type || "Property"}</h3>
+        <h3 className="text-lg font-semibold text-neutral-900 mb-2 line-clamp-2">{props.property_type || "Property"}</h3>
         <div className="flex items-center gap-2 mb-1 text-neutral-700 text-sm">
           <MapPin className="w-4 h-4" />
-          <span>{city}, {district}, {state}</span>
+          <span>{props.city}, {props.district}, {props.state}</span>
         </div>
-        <div className="mb-0.5"><b>Reserve Price:</b> ₹ {reserve_price_rs}</div>
-        <div className="mb-0.5"><b>EMD:</b> ₹ {emd_rs}</div>
-        <div className="mb-0.5"><b>EMD Last Date:</b> {emd_last_date || "TBA"}</div>
-        <div className="mb-0.5"><b>Auction Start:</b> {auction_open_date || "TBA"}</div>
-        <div className="mb-1"><b>Auction End:</b> {auction_close_date || "TBA"}</div>
+        <div className="mb-0.5"><b>Reserve Price:</b> ₹ {props.reserve_price_rs}</div>
+        <div className="mb-0.5"><b>EMD:</b> ₹ {props.emd_rs}</div>
+        <div className="mb-0.5"><b>EMD Last Date:</b> {props.emd_last_date || "TBA"}</div>
+        <div className="mb-0.5"><b>Auction Start:</b> {props.auction_open_date || "TBA"}</div>
+        <div className="mb-1"><b>Auction End:</b> {props.auction_close_date || "TBA"}</div>
       </div>
       <div className="p-6 pt-0 flex gap-2">
         <Button variant="outline" className="w-full" size="sm" onClick={() => setOpen(true)}>
@@ -90,27 +63,27 @@ const PropertyCard = (props: PropertyCardProps) => {
       </div>
       <Modal isOpen={open} onClose={() => setOpen(false)} title="Property Details">
         <div className="space-y-2">
-          <div><b>Bank:</b> {bank_name}</div>
-          <div><b>Branch:</b> {branch_name}</div>
-          <div><b>Type:</b> {property_type}</div>
-          <div><b>Reserve Price:</b> ₹ {reserve_price_rs}</div>
-          <div><b>EMD:</b> ₹ {emd_rs}</div>
-          <div><b>EMD Last Date:</b> {emd_last_date || "TBA"}</div>
-          <div><b>Auction Start:</b> {auction_open_date || "TBA"}</div>
-          <div><b>Auction End:</b> {auction_close_date || "TBA"}</div>
-          <div><b>Sealed Bid Last Date:</b> {sealed_bid_last_date || "TBA"}</div>
-          <div><b>Sealed Bid Extended Date:</b> {sealed_bid_extended_date || "TBA"}</div>
-          <div><b>Borrower Name:</b> {borrower_name}</div>
-          <div><b>Owner Name:</b> {owner_name}</div>
-          <div><b>Ownership Type:</b> {ownership_type}</div>
-          <div><b>Summary Description:</b> {summary_description}</div>
-          <div><b>Property Sub Type:</b> {property_sub_type}</div>
-          <div><b>Type of Title Deed:</b> {type_of_title_deed}</div>
-          <div><b>Status of Possession:</b> {status_of_possession}</div>
-          <div><b>Address:</b> {address}</div>
-          <div><b>Nearest Airport/Railway/Bus:</b> {nearest_airport_railway_bus}</div>
-          <div><b>Authorised Officer Detail:</b> {authorised_officer_detail}</div>
-          <div><b>Location:</b> {city}, {district}, {state}</div>
+          <div><b>Bank:</b> {props.bank_name}</div>
+          <div><b>Branch:</b> {props.branch_name}</div>
+          <div><b>Type:</b> {props.property_type}</div>
+          <div><b>Reserve Price:</b> ₹ {props.reserve_price_rs}</div>
+          <div><b>EMD:</b> ₹ {props.emd_rs}</div>
+          <div><b>EMD Last Date:</b> {props.emd_last_date || "TBA"}</div>
+          <div><b>Auction Start:</b> {props.auction_open_date || "TBA"}</div>
+          <div><b>Auction End:</b> {props.auction_close_date || "TBA"}</div>
+          <div><b>Sealed Bid Last Date:</b> {props.sealed_bid_last_date || "TBA"}</div>
+          <div><b>Sealed Bid Extended Date:</b> {props.sealed_bid_extended_date || "TBA"}</div>
+          <div><b>Borrower Name:</b> {props.borrower_name}</div>
+          <div><b>Owner Name:</b> {props.owner_name}</div>
+          <div><b>Ownership Type:</b> {props.ownership_type}</div>
+          <div><b>Summary Description:</b> {props.summary_description}</div>
+          <div><b>Property Sub Type:</b> {props.property_sub_type}</div>
+          <div><b>Type of Title Deed:</b> {props.type_of_title_deed}</div>
+          <div><b>Status of Possession:</b> {props.status_of_possession}</div>
+          <div><b>Address:</b> {props.address}</div>
+          <div><b>Nearest Airport/Railway/Bus:</b> {props.nearest_airport_railway_bus}</div>
+          <div><b>Authorised Officer Detail:</b> {props.authorised_officer_detail}</div>
+          <div><b>Location:</b> {props.city}, {props.district}, {props.state}</div>
         </div>
       </Modal>
     </div>
