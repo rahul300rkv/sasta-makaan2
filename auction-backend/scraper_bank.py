@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 import json
 import csv
@@ -16,7 +17,8 @@ with open(os.path.join(script_dir, 'states.txt'), 'r', encoding='utf-8') as f:
 chrome_options = Options()
 chrome_options.add_argument('--headless')
 chrome_options.binary_location = '/usr/bin/chromium-browser'
-driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver', options=chrome_options)
+service = Service('/usr/bin/chromedriver')
+driver = webdriver.Chrome(service=service, options=chrome_options)
 wait = WebDriverWait(driver, 20)
 
 all_properties = []
