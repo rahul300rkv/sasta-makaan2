@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PropertyList from "./components/PropertyList";
+import { Analytics } from "@vercel/analytics/react";
 // You can remove useTheme import from here if you don’t use it directly here
 
 const queryClient = new QueryClient();
@@ -23,7 +24,9 @@ const App = () => (
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
+    <Analytics />
   </QueryClientProvider>
+  
 );
 
 export default App;
