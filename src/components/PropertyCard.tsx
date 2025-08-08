@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
+import React, { useState } from 'react';
+import Modal from "@/components/YourModal"; // Replace with your actual modal component import
 import { Building, MapPin, Phone } from "lucide-react";
-import { Link } from "react-router-dom";
 
 interface PropertyCardProps {
   property_id: string;
@@ -29,20 +30,36 @@ interface PropertyCardProps {
   authorised_officer_detail?: string;
 }
 
-const PropertyCard = ({
-  property_id,
-  bank_name,
-  branch_name,
-  property_type,
-  reserve_price_rs,
-  emd_rs,
-  emd_last_date,
-  auction_open_date,
-  auction_close_date,
-  city,
-  district,
-  state,
-}: PropertyCardProps) => {
+const PropertyCard = (props: PropertyCardProps) => {
+  const [open, setOpen] = useState(false);
+
+  const {
+    property_id,
+    bank_name,
+    branch_name,
+    property_type,
+    reserve_price_rs,
+    emd_rs,
+    emd_last_date,
+    auction_open_date,
+    auction_close_date,
+    city,
+    district,
+    state,
+    borrower_name,
+    owner_name,
+    ownership_type,
+    summary_description,
+    property_sub_type,
+    type_of_title_deed,
+    status_of_possession,
+    sealed_bid_last_date,
+    sealed_bid_extended_date,
+    address,
+    nearest_airport_railway_bus,
+    authorised_officer_detail,
+  } = props;
+
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border flex flex-col justify-between min-h-[320px]">
       <div className="p-6 flex-1">
@@ -64,15 +81,40 @@ const PropertyCard = ({
         <div className="mb-1"><b>Auction End:</b> {auction_close_date || "TBA"}</div>
       </div>
       <div className="p-6 pt-0 flex gap-2">
-        <Link to={`/property/${property_id}`} className="flex-1">
-          <Button variant="outline" className="w-full" size="sm">
-            View Details
-          </Button>
-        </Link>
+        {/* Button triggers modal popup */}
+        <Button variant="outline" className="w-full" size="sm" onClick={() => setOpen(true)}>
+          View Details
+        </Button>
         <Button variant="outline" size="sm" className="px-3" onClick={() => window.open('tel:1800123456')}>
           <Phone className="w-4 h-4" />
         </Button>
       </div>
+      {/* Details Modal */}
+      <Modal isOpen={open} onClose={() => setOpen(false)} title="Property Details">
+        <div className="space-y-2">
+          <div><b>Bank:</b> {bank_name}</div>
+          <div><b>Branch:</b> {branch_name}</div>
+          <div><b>Type:</b> {property_type}</div>
+          <div><b>Reserve Price:</b> ₹ {reserve_price_rs}</div>
+          <div><b>EMD:</b> ₹ {emd_rs}</div>
+          <div><b>EMD Last Date:</b> {emd_last_date || "TBA"}</div>
+          <div><b>Auction Start:</b> {auction_open_date || "TBA"}</div>
+          <div><b>Auction End:</b> {auction_close_date || "TBA"}</div>
+          <div><b>Sealed Bid Last Date:</b> {sealed_bid_last_date || "TBA"}</div>
+          <div><b>Sealed Bid Extended Date:</b> {sealed_bid_extended_date || "TBA"}</div>
+          <div><b>Borrower Name:</b> {borrower_name}</div>
+          <div><b>Owner Name:</b> {owner_name}</div>
+          <div><b>Ownership Type:</b> {ownership_type}</div>
+          <div><b>Summary Description:</b> {summary_description}</div>
+          <div><b>Property Sub Type:</b> {property_sub_type}</div>
+          <div><b>Type of Title Deed:</b> {type_of_title_deed}</div>
+          <div><b>Status of Possession:</b> {status_of_possession}</div>
+          <div><b>Address:</b> {address}</div>
+          <div><b>Nearest Airport/Railway/Bus:</b> {nearest_airport_railway_bus}</div>
+          <div><b>Authorised Officer Detail:</b> {authorised_officer_detail}</div>
+          <div><b>Location:</b> {city}, {district}, {state}</div>
+        </div>
+      </Modal>
     </div>
   );
 };
