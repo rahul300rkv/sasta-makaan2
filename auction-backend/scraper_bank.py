@@ -6,9 +6,11 @@ from selenium.webdriver.chrome.options import Options
 import json
 import csv
 import time
+import os
 
+script_dir = os.path.dirname(__file__)
 # 1. Load the list of desired state names from text file
-with open('states.txt', 'r', encoding='utf-8') as f:
+with open(os.path.join(script_dir, 'states.txt'), 'r', encoding='utf-8') as f:
     states = [line.strip() for line in f if line.strip()]
 
 chrome_options = Options()
@@ -90,7 +92,8 @@ for state in states:
 driver.quit()
 
 # Save as JSON (optional)
-with open('ibapi_all_states_properties.json', 'w', encoding='utf-8') as f:
+json_path = os.path.join(script_dir, 'ibapi_all_states_properties.json')
+with open(json_path, 'w', encoding='utf-8') as f:
     json.dump(all_properties, f, ensure_ascii=False, indent=2)
 print(f"Scraped {len(all_properties)} properties across all states and saved JSON.")
 
@@ -101,9 +104,9 @@ csv_columns = [
     "state", "district", "city"
 ]
 
-csv_file = "ibapi_all_states_properties.csv"
+csv_path = os.path.join(script_dir, 'ibapi_all_states_properties.csv')
 try:
-    with open(csv_file, 'w', encoding='utf-8', newline='') as csvfile:
+    with open(csv_path, 'w', encoding='utf-8', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
         writer.writeheader()
         for data in all_properties:
