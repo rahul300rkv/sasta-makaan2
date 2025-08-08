@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import React, { useState } from 'react';
-import Modal from "@/components/YourModal"; // Replace with your actual modal component import
+import Modal from "@/components/YourModal";
 import { Building, MapPin, Phone } from "lucide-react";
 
 interface PropertyCardProps {
@@ -81,7 +81,6 @@ const PropertyCard = (props: PropertyCardProps) => {
         <div className="mb-1"><b>Auction End:</b> {auction_close_date || "TBA"}</div>
       </div>
       <div className="p-6 pt-0 flex gap-2">
-        {/* Button triggers modal popup */}
         <Button variant="outline" className="w-full" size="sm" onClick={() => setOpen(true)}>
           View Details
         </Button>
@@ -89,7 +88,6 @@ const PropertyCard = (props: PropertyCardProps) => {
           <Phone className="w-4 h-4" />
         </Button>
       </div>
-      {/* Details Modal */}
       <Modal isOpen={open} onClose={() => setOpen(false)} title="Property Details">
         <div className="space-y-2">
           <div><b>Bank:</b> {bank_name}</div>
