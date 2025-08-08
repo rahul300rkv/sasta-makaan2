@@ -2,28 +2,28 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 import json
 import csv
 import time
-import os
 
-script_dir = os.path.dirname(__file__)
+
 # 1. Load the list of desired state names from text file
-with open(os.path.join(script_dir, 'states.txt'), 'r', encoding='utf-8') as f:
+with open('states.txt', 'r', encoding='utf-8') as f:
     states = [line.strip() for line in f if line.strip()]
+
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')
-chrome_options.binary_location = '/usr/bin/chromium-browser'
-service = Service('/usr/bin/chromedriver')
-driver = webdriver.Chrome(service=service, options=chrome_options)
+driver = webdriver.Chrome(options=chrome_options)
 wait = WebDriverWait(driver, 20)
+
 
 all_properties = []
 
+
 driver.get('https://www.ibapi.in/sale_info_home.aspx')
+
 
 for state in states:
     print(f"Processing state: {state}")
@@ -47,13 +47,16 @@ for state in states:
                 time.sleep(0.5)
         Select(driver.find_element(By.ID, 'DropDownList_Property_Type')).select_by_visible_text('All Properties')
 
+
         # Accept T&C if not already ticked
         checkbox = driver.find_element(By.ID, 'chk_term')
         if not checkbox.is_selected():
             checkbox.click()
 
+
         search_btn = driver.find_element(By.ID, 'Button_search')
         search_btn.click()
+
 
         try:
             wait.until(EC.visibility_of_element_located((By.ID, 'tbl_search')))
@@ -66,11 +69,13 @@ for state in states:
                 pass
             continue
 
+
         for _ in range(12):
             rows = driver.find_elements(By.CSS_SELECTOR, '#tbl_search tbody tr')
             if len(rows) > 0:
                 break
             time.sleep(1)
+
 
         for row in rows:
             cells = row.find_elements(By.TAG_NAME, 'td')
@@ -92,13 +97,15 @@ for state in states:
         print(f"Error for {state}: {str(e)}")
         continue
 
+
 driver.quit()
 
+
 # Save as JSON (optional)
-json_path = os.path.join(script_dir, 'ibapi_all_states_properties.json')
-with open(json_path, 'w', encoding='utf-8') as f:
+with open('ibapi_all_states_properties.json', 'w', encoding='utf-8') as f:
     json.dump(all_properties, f, ensure_ascii=False, indent=2)
 print(f"Scraped {len(all_properties)} properties across all states and saved JSON.")
+
 
 # Save as CSV for Supabase import
 csv_columns = [
@@ -107,9 +114,10 @@ csv_columns = [
     "state", "district", "city"
 ]
 
-csv_path = os.path.join(script_dir, 'ibapi_all_states_properties.csv')
+
+csv_file = "ibapi_all_states_properties.csv"
 try:
-    with open(csv_path, 'w', encoding='utf-8', newline='') as csvfile:
+    with open(csv_file, 'w', encoding='utf-8', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
         writer.writeheader()
         for data in all_properties:
