@@ -3,7 +3,7 @@ name: Automated Web Scraper
 on:
   schedule:
     - cron: "0 * * * *"      # runs every hour
-  workflow_dispatch:         # allows manual run from GitHub UI
+  workflow_dispatch:
 
 jobs:
   scrape:
@@ -17,9 +17,19 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install dependencies
+      - name: Install Chrome and ChromeDriver
         run: |
-          pip install selenium
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser chromium-chromedriver
+          sudo ln -s /usr/bin/chromedriver /usr/bin/google-chrome # for some runners
+
+      - name: Install selenium
+        run: pip install selenium
+
+      - name: Debug files
+        run: ls -la auction-backend
+        # You can also print the contents of states.txt for extra debug:
+        # run: cat auction-backend/states.txt
 
       - name: Run scraper
         run: python auction-backend/scraper_bank.py
