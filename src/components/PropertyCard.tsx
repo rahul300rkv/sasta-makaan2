@@ -5,7 +5,7 @@ import { Building, MapPin, Phone } from "lucide-react";
 interface PropertyCardProps {
   property_id: string;
   bank_name: string;
-  branch_name: string;
+  branch_name?: string;
   state: string;
   district: string;
   reserve_price_rs: string;
