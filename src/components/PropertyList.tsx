@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { supabase } from './supabaseClient';
 import Footer from "@/components/Footer";
 import HowItWorks from "@/components/HowItWorks";
-import PropertyCard from "@/components/PropertyCard"; // adjust the import path
+import PropertyCard from "@/components/PropertyCard";
 
 interface Property {
   property_id: string;
