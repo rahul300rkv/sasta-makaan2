@@ -4,47 +4,49 @@ import { Calendar, MapPin, Building, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface PropertyCardProps {
-  property_id: number;
+  property_id: string;
   bank_name: string;
-  property: string;
-  reserve_price: string;
-  emd: string;
-  emd_last_date?: string;
-  auction_start_date?: string;
-  auction_end_date?: string;
-  city: string;
-  district: string;
+  branch_name: string;
   state: string;
-  status: "upcoming" | "live" | "ended";
+  district: string;
+  reserve_price_rs: string;
+  emd_rs: string;
+  emd_last_date?: string;
+  city: string;
+  borrower_name?: string;
+  owner_name?: string;
+  ownership_type?: string;
+  summary_description?: string;
+  property_type?: string;
+  property_sub_type?: string;
+  type_of_title_deed?: string;
+  status_of_possession?: string;
+  auction_open_date?: string;
+  auction_close_date?: string;
+  sealed_bid_last_date?: string;
+  sealed_bid_extended_date?: string;
+  address?: string;
+  nearest_airport_railway_bus?: string;
+  authorised_officer_detail?: string;
+  
 }
+
 
 const PropertyCard = ({
   property_id,
   bank_name,
-  property,
-  reserve_price,
-  emd,
+  branch_name,
+  property_type,
+  reserve_price_rs,
+  emd_rs,
   emd_last_date,
-  auction_start_date,
-  auction_end_date,
+  auction_open_date,
+  auction_close_date,
   city,
   district,
-  state,
-  status
+  state
 }: PropertyCardProps) => {
-  const getStatusBadge = () => {
-    switch (status) {
-      case "live":
-        return <Badge className="bg-primary text-primary-foreground animate-pulse">Live Auction</Badge>;
-      case "upcoming":
-        return <Badge className="bg-accent text-accent-foreground">Upcoming</Badge>;
-      case "ended":
-        return <Badge variant="secondary">Auction Ended</Badge>;
-      default:
-        return null;
-    }
-  };
-
+  // rest of the code...
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border flex flex-col justify-between min-h-[320px]">
       <div className="p-6 flex-1">
@@ -53,18 +55,18 @@ const PropertyCard = ({
             <Building className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-primary">{bank_name}</span>
           </div>
-          {getStatusBadge()}
+         
         </div>
-        <h3 className="text-lg font-semibold text-neutral-900 mb-2 line-clamp-2">{property}</h3>
+        <h3 className="text-lg font-semibold text-neutral-900 mb-2 line-clamp-2">{property_type}</h3>
         <div className="flex items-center gap-2 mb-1 text-neutral-700 text-sm">
           <MapPin className="w-4 h-4" />
           <span>{city}, {district}, {state}</span>
         </div>
-        <div className="mb-0.5"><b>Reserve Price:</b> ₹ {reserve_price}</div>
-        <div className="mb-0.5"><b>EMD:</b> ₹ {emd}</div>
+        <div className="mb-0.5"><b>Reserve Price:</b> ₹ {reserve_price_rs}</div>
+        <div className="mb-0.5"><b>EMD:</b> ₹ {emd_rs}</div>
         <div className="mb-0.5"><b>EMD Last Date:</b> {emd_last_date || "TBA"}</div>
-        <div className="mb-0.5"><b>Auction Start:</b> {auction_start_date || "TBA"}</div>
-        <div className="mb-1"><b>Auction End:</b> {auction_end_date || "TBA"}</div>
+        <div className="mb-0.5"><b>Auction Start:</b> {auction_open_date || "TBA"}</div>
+        <div className="mb-1"><b>Auction End:</b> {auction_close_date || "TBA"}</div>
       </div>
       <div className="p-6 pt-0 flex gap-2">
         <Link to={`/property/${property_id}`} className="flex-1">
@@ -79,5 +81,6 @@ const PropertyCard = ({
     </div>
   );
 };
+
 
 export default PropertyCard;
