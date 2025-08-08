@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, MapPin, Building, Phone } from "lucide-react";
+import { Building, MapPin, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface PropertyCardProps {
@@ -28,9 +27,7 @@ interface PropertyCardProps {
   address?: string;
   nearest_airport_railway_bus?: string;
   authorised_officer_detail?: string;
-  
 }
-
 
 const PropertyCard = ({
   property_id,
@@ -44,9 +41,8 @@ const PropertyCard = ({
   auction_close_date,
   city,
   district,
-  state
+  state,
 }: PropertyCardProps) => {
-  // rest of the code...
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border flex flex-col justify-between min-h-[320px]">
       <div className="p-6 flex-1">
@@ -55,9 +51,8 @@ const PropertyCard = ({
             <Building className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-primary">{bank_name}</span>
           </div>
-         
         </div>
-        <h3 className="text-lg font-semibold text-neutral-900 mb-2 line-clamp-2">{property_type}</h3>
+        <h3 className="text-lg font-semibold text-neutral-900 mb-2 line-clamp-2">{property_type || "Property"}</h3>
         <div className="flex items-center gap-2 mb-1 text-neutral-700 text-sm">
           <MapPin className="w-4 h-4" />
           <span>{city}, {district}, {state}</span>
@@ -70,8 +65,8 @@ const PropertyCard = ({
       </div>
       <div className="p-6 pt-0 flex gap-2">
         <Link to={`/property/${property_id}`} className="flex-1">
-          <Button variant={status === "live" ? "default" : "outline"} className="w-full" size="sm">
-            {status === "live" ? "Join Auction" : "View Details"}
+          <Button variant="outline" className="w-full" size="sm">
+            View Details
           </Button>
         </Link>
         <Button variant="outline" size="sm" className="px-3" onClick={() => window.open('tel:1800123456')}>
@@ -81,6 +76,5 @@ const PropertyCard = ({
     </div>
   );
 };
-
 
 export default PropertyCard;
