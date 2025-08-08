@@ -16,7 +16,7 @@ with open(os.path.join(script_dir, 'states.txt'), 'r', encoding='utf-8') as f:
 chrome_options = Options()
 chrome_options.add_argument('--headless')
 chrome_options.binary_location = '/usr/bin/chromium-browser'
-driver = webdriver.Chrome(options=chrome_options)
+driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver', options=chrome_options)
 wait = WebDriverWait(driver, 20)
 
 all_properties = []
