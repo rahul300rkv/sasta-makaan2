@@ -6,22 +6,6 @@ import Modal from "@/components/YourModal";
 import HowItWorks from "@/components/HowItWorks";
 import PropertyCard from "@/components/PropertyCard";
 
-interface Property {
-  property_id: string;
-  bank_name: string;
-  branch_name?: string;
-  property_type: string;
-  reserve_price_rs: string;
-  emd_rs: string;
-  emd_last_date?: string;
-  auction_open_date?: string;
-  auction_close_date?: string;
-  city: string;
-  district: string;
-  state: string;
-  // add other fields as needed
-}
-
 function parseRupee(str = "") {
   const cleaned = str.replace(/,/g, "");
   const num = parseFloat(cleaned);
@@ -67,7 +51,6 @@ const PropertyList: React.FC = () => {
     .catch(() => setLoading(false));
   }, [selectedState, selectedBank, selectedType, selectedBudget]);
 
-  // Handle modal open/close and pass the property details
   const openModal = (property: Property) => {
     setModalProperty(property);
     setModalOpen(true);
@@ -116,8 +99,19 @@ const PropertyList: React.FC = () => {
             <div><b>EMD Last Date:</b> {modalProperty.emd_last_date || "TBA"}</div>
             <div><b>Auction Start:</b> {modalProperty.auction_open_date || "TBA"}</div>
             <div><b>Auction End:</b> {modalProperty.auction_close_date || "TBA"}</div>
+            <div><b>Sealed Bid Last Date:</b> {modalProperty.sealed_bid_last_date || "TBA"}</div>
+            <div><b>Sealed Bid Extended Date:</b> {modalProperty.sealed_bid_extended_date || "TBA"}</div>
+            <div><b>Borrower Name:</b> {modalProperty.borrower_name}</div>
+            <div><b>Owner Name:</b> {modalProperty.owner_name}</div>
+            <div><b>Ownership Type:</b> {modalProperty.ownership_type}</div>
+            <div><b>Summary Description:</b> {modalProperty.summary_description}</div>
+            <div><b>Property Sub Type:</b> {modalProperty.property_sub_type}</div>
+            <div><b>Type of Title Deed:</b> {modalProperty.type_of_title_deed}</div>
+            <div><b>Status of Possession:</b> {modalProperty.status_of_possession}</div>
+            <div><b>Address:</b> {modalProperty.address}</div>
+            <div><b>Nearest Airport/Railway/Bus:</b> {modalProperty.nearest_airport_railway_bus}</div>
+            <div><b>Authorised Officer Detail:</b> {modalProperty.authorised_officer_detail}</div>
             <div><b>Location:</b> {modalProperty.city}, {modalProperty.district}, {modalProperty.state}</div>
-            {/* Add other details as needed */}
           </div>
         )}
       </Modal>
