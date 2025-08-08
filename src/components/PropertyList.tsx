@@ -110,7 +110,6 @@ const PropertyList: React.FC = () => {
             <div><b>Status of Possession:</b> {modalProperty.status_of_possession}</div>
             <div><b>Address:</b> {modalProperty.address}</div>
             <div><b>Nearest Airport/Railway/Bus:</b> {modalProperty.nearest_airport_railway_bus}</div>
-            <div><b>Authorised Officer Detail:</b> {modalProperty.authorised_officer_detail}</div>
             <div><b>Location:</b> {modalProperty.city}, {modalProperty.district}, {modalProperty.state}</div>
           </div>
         )}
