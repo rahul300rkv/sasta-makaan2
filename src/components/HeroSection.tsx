@@ -129,6 +129,11 @@ const HeroSection = () => {
               </div>
               <Button type="submit" size="lg"
                 className="bg-primary hover:bg-primary/90 text-white px-8 flex gap-2 items-center"
+                onClick={handleSearch}
+  disabled={
+    (!selectedState || selectedState === "Select State") &&
+    (!selectedBank || selectedBank === "Select Bank")
+  }
               >
                 <Search className="w-5 h-5" />
                 Search
