@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { supabase } from './supabaseClient';
 import Footer from "@/components/Footer";
+import Modal from "@/components/YourModal";
 import HowItWorks from "@/components/HowItWorks";
 import PropertyCard from "@/components/PropertyCard";
 
@@ -18,7 +19,7 @@ interface Property {
   city: string;
   district: string;
   state: string;
-  // ...other fields as needed
+  // add other fields as needed
 }
 
 function parseRupee(str = "") {
@@ -31,6 +32,8 @@ const PropertyList: React.FC = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalProperty, setModalProperty] = useState<Property | null>(null);
 
   const selectedState = searchParams.get('state') || '';
   const selectedBank = searchParams.get('bank') || '';
@@ -64,6 +67,17 @@ const PropertyList: React.FC = () => {
     .catch(() => setLoading(false));
   }, [selectedState, selectedBank, selectedType, selectedBudget]);
 
+  // Handle modal open/close and pass the property details
+  const openModal = (property: Property) => {
+    setModalProperty(property);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setModalProperty(null);
+  };
+
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8 bg-neutral-50">
       <div className="max-w-7xl mx-auto">
@@ -86,11 +100,27 @@ const PropertyList: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {properties.map(property => (
-              <PropertyCard key={property.property_id} {...property} />
+              <PropertyCard key={property.property_id} {...property} onViewDetails={() => openModal(property)} />
             ))}
           </div>
         )}
       </div>
+      <Modal isOpen={modalOpen} onClose={closeModal} title="Property Details">
+        {modalProperty && (
+          <div>
+            <div><b>Bank:</b> {modalProperty.bank_name}</div>
+            <div><b>Branch:</b> {modalProperty.branch_name}</div>
+            <div><b>Type:</b> {modalProperty.property_type}</div>
+            <div><b>Reserve Price:</b> ₹ {modalProperty.reserve_price_rs}</div>
+            <div><b>EMD:</b> ₹ {modalProperty.emd_rs}</div>
+            <div><b>EMD Last Date:</b> {modalProperty.emd_last_date || "TBA"}</div>
+            <div><b>Auction Start:</b> {modalProperty.auction_open_date || "TBA"}</div>
+            <div><b>Auction End:</b> {modalProperty.auction_close_date || "TBA"}</div>
+            <div><b>Location:</b> {modalProperty.city}, {modalProperty.district}, {modalProperty.state}</div>
+            {/* Add other details as needed */}
+          </div>
+        )}
+      </Modal>
       <section id="how-it-works">
         <HowItWorks />
       </section>
