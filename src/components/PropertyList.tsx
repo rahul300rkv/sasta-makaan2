@@ -117,6 +117,13 @@ const PropertyList: React.FC = () => {
       <Modal isOpen={modalOpen} onClose={closeModal} title="Property Details">
         {modalProperty && (
           <div className="modal-content">
+             <button
+        onClick={closeModal}
+        className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-300 dark:hover:bg-neutral-700 focus:outline-none"
+        aria-label="Close"
+      >
+        &times;
+      </button>
             <div><b>Bank:</b> {modalProperty.bank_name}</div>
             <div><b>Branch:</b> {modalProperty.branch_name}</div>
             <div><b>Type:</b> {modalProperty.property_type}</div>
