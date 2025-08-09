@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import Modal from "@/components/YourModal";
 import HowItWorks from "@/components/HowItWorks";
 import PropertyCard from "@/components/PropertyCard";
-
+import { Link } from "react-router-dom";
 function parseRupee(str = "") {
   const cleaned = str.replace(/,/g, "");
   const num = parseFloat(cleaned);
@@ -89,7 +89,17 @@ const PropertyList: React.FC = () => {
 
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8 bg-neutral-50">
+      <div className="max-w-7xl mx-auto flex items-center p-1">
+       <Link to="/">
+        <img
+          src="/favicon.png"
+          alt="Logo"
+          className="h-16 w-auto cursor-pointer"
+        />
+      </Link>
+      </div>
       <div className="max-w-7xl mx-auto">
+        
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
             All Auction Properties
