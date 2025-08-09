@@ -140,4 +140,22 @@ All colors MUST be HSL.
     background: hsl(var(--muted));
     border-radius: 4px;
   }
+  .modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: #eee;
+  color: #444;
+  border: none;
+  font-size: 1.5rem;
+  border-radius: 50%;
+  width: 36px; height: 36px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+  .modal-close:hover {
+  background: #ccc;
+}
 }
