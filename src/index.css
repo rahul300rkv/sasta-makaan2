@@ -57,58 +57,48 @@ All colors MUST be HSL.
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
+  /* Improved dark mode design tokens for visibility */
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222 84% 8%;
     --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
+    --card: 220 18% 12%;
     --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
+    --popover: 220 18% 12%;
     --popover-foreground: 210 40% 98%;
+    --primary: 218 100% 60%;
+    --primary-foreground: 222 84% 8%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 220 14% 22%;
     --secondary-foreground: 210 40% 98%;
+    --muted: 220 14% 30%;
+    --muted-foreground: 210 40% 80%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 25 95% 53%;
     --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62% 45%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 220 14% 22%;
+    --input: 220 14% 22%;
+    --ring: 218 100% 60%;
+
+    --sidebar-background: 220 14% 12%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 218 100% 60%;
+    --sidebar-primary-foreground: 222 84% 8%;
+    --sidebar-accent: 218 100% 30%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 220 14% 22%;
+    --sidebar-ring: 218 100% 60%;
   }
 }
 
@@ -119,5 +109,35 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* -------------------------------------
+   Modal: readable, scrollable, custom
+   ------------------------------------- */
+@layer components {
+  .modal-content {
+    background: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-floating);
+    padding: 1.5rem;
+    transition: var(--transition-smooth);
+  }
+
+  .dark .modal-content {
+    background: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+  }
+
+  .modal-content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .modal-content::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted));
+    border-radius: 4px;
   }
 }
