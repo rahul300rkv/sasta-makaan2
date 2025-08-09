@@ -116,7 +116,15 @@ const PropertyList: React.FC = () => {
       </div>
       <Modal isOpen={modalOpen} onClose={closeModal} title="Property Details">
         {modalProperty && (
-          <div className="modal-content">
+        
+        <div className="
+  modal-content 
+  bg-white dark:bg-neutral-900
+  text-neutral-900 dark:text-neutral-100
+  rounded-xl shadow-lg
+  relative
+">
+  
             
             <div><b>Bank:</b> {modalProperty.bank_name}</div>
             <div><b>Branch:</b> {modalProperty.branch_name}</div>
