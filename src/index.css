@@ -53,7 +53,6 @@ All colors MUST be HSL.
     --shadow-floating: 0 4px 20px hsl(0 0% 0% / 0.12);
 
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
@@ -66,24 +65,28 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  /* Improved dark mode design tokens for visibility */
   .dark {
     --background: 222 84% 8%;
     --foreground: 210 40% 98%;
+
     --card: 220 18% 12%;
     --card-foreground: 210 40% 98%;
+
     --popover: 220 18% 12%;
     --popover-foreground: 210 40% 98%;
+
     --primary: 218 100% 60%;
     --primary-foreground: 222 84% 8%;
 
     --secondary: 220 14% 22%;
     --secondary-foreground: 210 40% 98%;
+
     --muted: 220 14% 30%;
     --muted-foreground: 210 40% 80%;
 
     --accent: 25 95% 53%;
     --accent-foreground: 210 40% 98%;
+
     --destructive: 0 62% 45%;
     --destructive-foreground: 210 40% 98%;
 
@@ -113,9 +116,10 @@ All colors MUST be HSL.
 }
 
 /* -------------------------------------
-   Modal: readable, scrollable, custom
+   Modal and Property Cards: style
    ------------------------------------- */
 @layer components {
+  /* Modal styling */
   .modal-content {
     background: hsl(var(--card));
     color: hsl(var(--card-foreground));
@@ -125,37 +129,69 @@ All colors MUST be HSL.
     box-shadow: var(--shadow-floating);
     padding: 1.5rem;
     transition: var(--transition-smooth);
+    position: relative;
+    width: clamp(300px, 90vw, 420px);
   }
-
   .dark .modal-content {
     background: hsl(var(--card));
     color: hsl(var(--card-foreground));
   }
-
   .modal-content::-webkit-scrollbar {
     width: 8px;
   }
-
   .modal-content::-webkit-scrollbar-thumb {
     background: hsl(var(--muted));
     border-radius: 4px;
   }
+  /* Close button styling */
   .modal-close {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  background: #eee;
-  color: #444;
-  border: none;
-  font-size: 1.5rem;
-  border-radius: 50%;
-  width: 36px; height: 36px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: #eee;
+    color: #444;
+    border: none;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    width: 36px; height: 36px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 1;
+  }
   .modal-close:hover {
-  background: #ccc;
-}
+    background: #ccc;
+  }
+
+  /* Property card styling */
+  .property-card {
+    background: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    border: 1px solid hsl(var(--border));
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .dark .property-card {
+    background: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    border: 1px solid hsl(var(--border));
+  }
+
+  /* Example text colors for inner elements, adjust as needed */
+  .property-card .card-title {
+    color: hsl(var(--foreground));
+    font-weight: 600;
+  }
+  .property-card .card-label {
+    color: hsl(var(--muted-foreground));
+  }
+  .property-card .card-value {
+    color: hsl(var(--foreground));
+  }
 }
