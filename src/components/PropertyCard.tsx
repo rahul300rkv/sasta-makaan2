@@ -55,7 +55,24 @@ const PropertyCard = (props: PropertyCardProps) => {
             <span className="text-sm font-medium text-primary">{props.bank_name}</span>
           </div>
         </div>
-        <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2 line-clamp-2">{props.property_type || "Property"}</h3>
+       <span
+  className="
+    absolute top-4 right-4
+      inline-block
+      px-4 py-1
+      rounded-full
+      bg-gradient-to-r from-purple-500 via-pink-500 to-red-400
+      text-white font-bold
+      shadow-lg
+      text-sm
+      tracking-wider
+      border border-white/20
+      transition-all
+      [font-family:'Montserrat',_sans-serif]
+      dark:bg-gradient-to-r dark:from-violet-800 dark:via-pink-800 dark:to-red-600
+      dark:text-yellow-300
+  "
+>{props.property_type || "Property"}</span>
         <div className="flex items-center gap-2 mb-1 text-neutral-700 dark:text-neutral-300 text-sm">
           <MapPin className="w-4 h-4" />
           <span>{props.city}, {props.district}, {props.state}</span>
