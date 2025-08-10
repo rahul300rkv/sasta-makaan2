@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "react-snap", 
+    "build": "react-scripts build && npx react-snap",
+    "postbuild": "npx react-snap"
     "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
