@@ -6,6 +6,7 @@ import LeadCaptureSection from "@/components/LeadCaptureSection";
 import Footer from "@/components/Footer";
 import { Helmet } from 'react-helmet';
 
+
 const Index = () => {
   return (
     <>
@@ -21,6 +22,7 @@ const Index = () => {
     </Helmet>
     <div className="min-h-screen bg-background text-foreground transition-colors">
       <section id="properties-list">
+        
         <HeroSection />
       </section>
       <section id="how-it-works">

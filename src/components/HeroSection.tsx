@@ -1,11 +1,12 @@
 import { useTheme } from "@/theme/ThemeProvider";
+
 import React, { useState } from "react";
 import {
   MapPin, Landmark, IndianRupee, Search, Home,
   Leaf, Factory, Layers, ListFilter, Banknote
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import heroImage from "@/assets/hero-real-estate.jpg";
 
@@ -55,10 +56,19 @@ const HeroSection = () => {
 
   return (
     <section className="relative bg-background min-h-[500px] flex items-center justify-center overflow-hidden">
-      <img src={heroImage} alt="Real Estate Auctions Hero"
-        className="absolute inset-0 w-full h-full object-cover opacity-10 z-0 pointer-events-none"/>
+      
       <div className="absolute inset-0 z-0 bg-gradient-to-br from-neutral-50 to-neutral-100" />
+      
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+       <div className="max-w-7xl mx-auto flex items-center p-1">
+              <Link to="/">
+               <img
+                 src="/favicon.png"
+                 alt="Logo"
+                 className="h-16 w-auto cursor-pointer"
+               />
+             </Link>
+             </div>
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight text-neutral-900">
             Properties for the{" "}
@@ -129,6 +139,11 @@ const HeroSection = () => {
               </div>
               <Button type="submit" size="lg"
                 className="bg-primary hover:bg-primary/90 text-white px-8 flex gap-2 items-center"
+                onClick={handleSearch}
+  disabled={
+    (!selectedState || selectedState === "Select State") &&
+    (!selectedBank || selectedBank === "Select Bank")
+  }
               >
                 <Search className="w-5 h-5" />
                 Search

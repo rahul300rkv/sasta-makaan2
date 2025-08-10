@@ -1,6 +1,6 @@
-const express = require("express");
-const cors = require("cors");
-const { createClient } = require("@supabase/supabase-js");
+import express from "express";
+import cors from "cors";
+import { createClient } from "@supabase/supabase-js";
 
 // Replace with your actual Supabase project URL and key
 const SUPABASE_URL = "https://bbzwmzdukgmorngtxusw.supabase.co";
@@ -18,7 +18,6 @@ app.get('/properties', async (req, res) => {
   if (error) return res.status(500).json({ error: error.message });
   res.json(data);
 });
-
 
 // Add more routes as needed
 
