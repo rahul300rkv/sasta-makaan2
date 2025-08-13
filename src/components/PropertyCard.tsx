@@ -126,16 +126,16 @@ const PropertyCard = (props: PropertyCardProps) => {
         {/* PDF buttons */}
         {pdfs.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-2">
-            {pdfs.map((pdf, idx) => (
-              <Button
-                key={idx}
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-1"
-                onClick={() => window.open(pdf, "_blank")}
-              >
-                <FileText className="w-4 h-4" /> PDF {idx + 1}
-              </Button>
+            {pdfs.map((pdf, index) => (
+             <Button
+    key={index}
+    variant="outline"
+    size="sm"
+    className="px-3 flex items-center gap-1"
+    onClick={() => window.open(pdfUrl, "_blank")}
+  >
+    <FileText className="w-4 h-4 text-red-600" /> PDF {index + 1}
+  </Button>
             ))}
           </div>
         )}
