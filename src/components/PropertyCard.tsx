@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
-import { Building, MapPin, Phone, FileText } from "lucide-react";
+import { Building, MapPin, Phone } from "lucide-react";
 
 interface PropertyCardProps {
   property_id: string;
@@ -27,7 +27,7 @@ interface PropertyCardProps {
   ADDRESS?: string;
   nearest_airport_railway_bus?: string;
   authorised_officer_detail?: string;
-  media_urls?: string; // new field
+  media_urls?: string;
   onViewDetails: () => void;
 }
 
@@ -61,7 +61,7 @@ const PropertyCard = (props: PropertyCardProps) => {
 
   return (
     <div className="bg-white dark:bg-neutral-900 rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-neutral-200 dark:border-neutral-800 flex flex-col justify-between min-h-[320px]">
-      
+
       {/* Carousel */}
       {images.length > 0 && (
         <div className="relative w-full h-48 overflow-hidden">
@@ -97,19 +97,7 @@ const PropertyCard = (props: PropertyCardProps) => {
           </div>
         </div>
 
-        <span className="
-          absolute top-4 right-4
-          inline-block px-4 py-1
-          rounded-full
-          bg-gradient-to-r from-purple-500 via-pink-500 to-red-400
-          text-white font-bold
-          shadow-lg text-sm tracking-wider
-          border border-white/20
-          transition-all
-          [font-family:'Montserrat',_sans-serif]
-          dark:bg-gradient-to-r dark:from-violet-800 dark:via-pink-800 dark:to-red-600
-          dark:text-yellow-300
-        ">
+        <span className="absolute top-4 right-4 inline-block px-4 py-1 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-400 text-white font-bold shadow-lg text-sm tracking-wider border border-white/20 transition-all [font-family:'Montserrat',_sans-serif] dark:bg-gradient-to-r dark:from-violet-800 dark:via-pink-800 dark:to-red-600 dark:text-yellow-300">
           {props.property_type || "Property"}
         </span>
 
@@ -123,37 +111,38 @@ const PropertyCard = (props: PropertyCardProps) => {
         <div className="mb-0.5 dark:text-neutral-100"><b>Auction Start:</b> {props.auction_open_date || "TBA"}</div>
         <div className="mb-1 dark:text-neutral-100"><b>Auction End:</b> {props.auction_close_date || "TBA"}</div>
 
-       {pdfs.length > 0 && (
-  <div className="flex flex-wrap gap-2 mt-2">
-    {pdfs.map((pdf, index) => (
-      <Button
-        key={index}
-        variant="outline"
-        size="sm"
-        className="px-3 flex items-center gap-1"
-        onClick={() => window.open(pdf, "_blank")}
-      >
-        <FileText className="w-4 h-4 text-red-600" /> PDF {index + 1}
-      </Button>
-    ))}
-  </div>
-)}
-
+        {/* PDF buttons */}
+        {pdfs.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-2">
+            {pdfs.map((pdfUrl, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                size="sm"
+                className="px-3 flex items-center gap-1"
+                onClick={() => window.open(pdfUrl, "_blank")}
+              >
+                {/* Acrobat-style PDF icon */}
+                <svg className="w-4 h-4 text-red-600" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 2H14L20 8V22H6V2Z"/>
+                  <path d="M14 2V8H20" fill="white"/>
+                </svg>
+                PDF {index + 1}
+              </Button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="p-6 pt-0 flex gap-2">
         <Button variant="outline" className="w-full" size="sm" onClick={props.onViewDetails}>
           View Details
         </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          className="px-3"
-          onClick={() => { if (phoneNumber) window.open(`tel:${phoneNumber}`); }}
-          disabled={!phoneNumber}
-        >
-          <Phone className="w-4 h-4" />
-        </Button>
+        {phoneNumber && (
+          <Button variant="outline" size="sm" className="px-3" onClick={() => window.open(`tel:${phoneNumber}`)}>
+            <Phone className="w-4 h-4" />
+          </Button>
+        )}
       </div>
     </div>
   );
