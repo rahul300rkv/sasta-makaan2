@@ -1,162 +1,170 @@
-import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
-import { Building, MapPin, Phone, FileText } from "lucide-react";
-
-interface PropertyCardProps {
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { supabase } from './supabaseClient';
+import Footer from "@/components/Footer";
+import Modal from "@/components/YourModal";
+import HowItWorks from "@/components/HowItWorks";
+import PropertyCard from "@/components/PropertyCard";
+import { Link } from "react-router-dom";
+function parseRupee(str = "") {
+  const cleaned = str.replace(/,/g, "");
+  const num = parseFloat(cleaned);
+  return isNaN(num) ? 0 : Math.round(num);
+}
+interface Property {
   property_id: string;
   bank_name: string;
   branch_name?: string;
-  state: string;
-  district: string;
+  property_type?: string;
   reserve_price_rs: string;
   emd_rs: string;
   emd_last_date?: string;
+  auction_open_date?: string;
+  auction_close_date?: string;
   city: string;
+  district: string;
+  state: string;
   borrower_name?: string;
   owner_name?: string;
   ownership_type?: string;
   summary_description?: string;
-  property_type?: string;
   property_sub_type?: string;
   type_of_title_deed?: string;
   status_of_possession?: string;
-  auction_open_date?: string;
-  auction_close_date?: string;
   sealed_bid_last_date?: string;
   sealed_bid_extended_date?: string;
   ADDRESS?: string;
   nearest_airport_railway_bus?: string;
   authorised_officer_detail?: string;
-  media_urls?: string; // new field
-  onViewDetails: () => void;
 }
 
-// Extract 10-digit phone from AO detail
-function extractPhone(authorizedOfficerDetail?: string): string | null {
-  if (!authorizedOfficerDetail) return null;
-  const match = authorizedOfficerDetail.match(/\b\d{10}\b/);
-  return match ? match[0] : null;
-}
+const PropertyList: React.FC = () => {
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalProperty, setModalProperty] = useState<Property | null>(null);
 
-// Parse media_urls into images and PDFs
-function parseMedia(mediaUrls?: string) {
-  if (!mediaUrls) return { images: [], pdfs: [] };
-  const urls = mediaUrls
-    .split(",")
-    .map((u) => u.trim().replace(".in/IBAPI/", ".in/")); // clean URLs
-  const images = urls.filter((u) => /\.(jpg|jpeg|png|gif)$/i.test(u));
-  const pdfs = urls.filter((u) => /\.pdf$/i.test(u));
-  return { images, pdfs };
-}
+  const selectedState = searchParams.get('state') || '';
+  const selectedBank = searchParams.get('bank') || '';
+  const selectedType = searchParams.get('type') || '';
+  const selectedBudget = searchParams.get('budget') || '';
 
-const PropertyCard = (props: PropertyCardProps) => {
-  const phoneNumber = extractPhone(props.authorised_officer_detail);
-  const { images, pdfs } = parseMedia(props.media_urls);
-  const [currentImage, setCurrentImage] = useState(0);
+  useEffect(() => {
+    setLoading(true);
+    let query = supabase.from('properties').select('*');
+    if (selectedState) query = query.eq('state', selectedState);
+    if (selectedBank) query = query.eq('bank_name', selectedBank);
+    if (selectedType) query = query.eq('property_type', selectedType);
 
-  const nextImage = () =>
-    setCurrentImage((prev) => (prev + 1) % images.length);
-  const prevImage = () =>
-    setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+    query.then(({ data, error }) => {
+      let filtered = data as Property[] || [];
+      if (selectedBudget) {
+        if (selectedBudget.endsWith('+')) {
+          const min = parseInt(selectedBudget.slice(0, -1), 10);
+          filtered = filtered.filter(p => parseRupee(p.reserve_price_rs) >= min);
+        } else if (selectedBudget.includes('-')) {
+          const [min, max] = selectedBudget.split('-').map(x => parseInt(x, 10));
+          filtered = filtered.filter(p => {
+            const price = parseRupee(p.reserve_price_rs);
+            return price >= min && price <= max;
+          });
+        }
+      }
+      setProperties(filtered);
+      setLoading(false);
+    })
+    .catch(() => setLoading(false));
+  }, [selectedState, selectedBank, selectedType, selectedBudget]);
+
+  const openModal = (property: Property) => {
+    setModalProperty(property);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setModalProperty(null);
+  };
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-neutral-200 dark:border-neutral-800 flex flex-col justify-between min-h-[320px]">
-      
-      {/* Carousel */}
-      {images.length > 0 && (
-        <div className="relative w-full h-48 overflow-hidden">
-          <img
-            src={images[currentImage]}
-            alt="Property"
-            className="w-full h-full object-cover"
-          />
-          {images.length > 1 && (
-            <>
-              <button
-                onClick={prevImage}
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/40 text-white px-2 py-1 rounded"
-              >
-                ‹
-              </button>
-              <button
-                onClick={nextImage}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/40 text-white px-2 py-1 rounded"
-              >
-                ›
-              </button>
-            </>
-          )}
+    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-neutral-50">
+      <div className="max-w-7xl mx-auto flex items-center p-1">
+       <Link to="/">
+        <img
+          src="/favicon.png"
+          alt="Logo"
+          className="h-16 w-auto cursor-pointer"
+        />
+      </Link>
+      </div>
+      <div className="max-w-7xl mx-auto">
+        
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+            All Auction Properties
+          </h2>
+          <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
+            Explore all available bank auction properties across India. Use filters to find your perfect match!
+          </p>
         </div>
-      )}
-
-      <div className="p-6 flex-1">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <Building className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">{props.bank_name}</span>
+        {loading ? (
+          <div className="flex justify-center items-center min-h-[250px] text-lg text-neutral-600">
+            Loading...
           </div>
-        </div>
-
-        <span className="
-          absolute top-4 right-4
-          inline-block px-4 py-1
-          rounded-full
-          bg-gradient-to-r from-purple-500 via-pink-500 to-red-400
-          text-white font-bold
-          shadow-lg text-sm tracking-wider
-          border border-white/20
-          transition-all
-          [font-family:'Montserrat',_sans-serif]
-          dark:bg-gradient-to-r dark:from-violet-800 dark:via-pink-800 dark:to-red-600
-          dark:text-yellow-300
-        ">
-          {props.property_type || "Property"}
-        </span>
-
-        <div className="flex items-center gap-2 mb-1 text-neutral-700 dark:text-neutral-300 text-sm">
-          <MapPin className="w-4 h-4" />
-          <span>{props.city}, {props.district}, {props.state}</span>
-        </div>
-        <div className="mb-0.5 dark:text-neutral-100"><b>Reserve Price:</b> ₹ {props.reserve_price_rs}</div>
-        <div className="mb-0.5 dark:text-neutral-100"><b>EMD:</b> ₹ {props.emd_rs}</div>
-        <div className="mb-0.5 dark:text-neutral-100"><b>EMD Last Date:</b> {props.emd_last_date || "TBA"}</div>
-        <div className="mb-0.5 dark:text-neutral-100"><b>Auction Start:</b> {props.auction_open_date || "TBA"}</div>
-        <div className="mb-1 dark:text-neutral-100"><b>Auction End:</b> {props.auction_close_date || "TBA"}</div>
-
-        {/* PDF buttons */}
-        {pdfs.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-2">
-            {pdfs.map((pdf, idx) => (
-              <Button
-                key={idx}
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-1"
-                onClick={() => window.open(pdf, "_blank")}
-              >
-                <FileText className="w-4 h-4" /> PDF {idx + 1}
-              </Button>
+        ) : properties.length === 0 ? (
+          <div className="flex justify-center items-center min-h-[250px] text-lg text-neutral-500">
+            No properties listed.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {properties.map(property => (
+              <PropertyCard key={property.property_id} {...property} onViewDetails={() => openModal(property)} />
             ))}
           </div>
         )}
       </div>
-
-      <div className="p-6 pt-0 flex gap-2">
-        <Button variant="outline" className="w-full" size="sm" onClick={props.onViewDetails}>
-          View Details
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          className="px-3"
-          onClick={() => { if (phoneNumber) window.open(`tel:${phoneNumber}`); }}
-          disabled={!phoneNumber}
-        >
-          <Phone className="w-4 h-4" />
-        </Button>
-      </div>
-    </div>
+      <Modal isOpen={modalOpen} onClose={closeModal} title="Property Details">
+        {modalProperty && (
+        
+        <div className="
+  modal-content 
+  bg-white dark:bg-neutral-900
+  text-neutral-900 dark:text-neutral-100
+  rounded-xl shadow-lg
+  relative
+">
+  
+            
+            <div><b>Bank:</b> {modalProperty.bank_name}</div>
+            <div><b>Branch:</b> {modalProperty.branch_name}</div>
+            <div><b>Type:</b> {modalProperty.property_type}</div>
+            <div><b>Reserve Price:</b> ₹ {modalProperty.reserve_price_rs}</div>
+            <div><b>EMD:</b> ₹ {modalProperty.emd_rs}</div>
+            <div><b>EMD Last Date:</b> {modalProperty.emd_last_date || "TBA"}</div>
+            <div><b>Auction Start:</b> {modalProperty.auction_open_date || "TBA"}</div>
+            <div><b>Auction End:</b> {modalProperty.auction_close_date || "TBA"}</div>
+            <div><b>Sealed Bid Last Date:</b> {modalProperty.sealed_bid_last_date || "TBA"}</div>
+            <div><b>Sealed Bid Extended Date:</b> {modalProperty.sealed_bid_extended_date || "TBA"}</div>
+            <div><b>Borrower Name:</b> {modalProperty.borrower_name}</div>
+            <div><b>Owner Name:</b> {modalProperty.owner_name}</div>
+            <div><b>Ownership Type:</b> {modalProperty.ownership_type}</div>
+            <div><b>Summary Description:</b> {modalProperty.summary_description}</div>
+            <div><b>Property Sub Type:</b> {modalProperty.property_sub_type}</div>
+            <div><b>Type of Title Deed:</b> {modalProperty.type_of_title_deed}</div>
+            <div><b>Status of Possession:</b> {modalProperty.status_of_possession}</div>
+            <div><b>Address:</b> {modalProperty.ADDRESS}</div>
+            <div><b>Nearest Airport/Railway/Bus:</b> {modalProperty.nearest_airport_railway_bus}</div>
+            <div><b>Location:</b> {modalProperty.city}, {modalProperty.district}, {modalProperty.state}</div>
+          </div>
+        )}
+      </Modal>
+      <section id="how-it-works">
+        <HowItWorks />
+      </section>
+      <Footer />
+    </section>
   );
 };
 
-export default PropertyCard;
+export default PropertyList;
