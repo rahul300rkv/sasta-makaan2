@@ -153,7 +153,7 @@ const PropertyList: React.FC = () => {
             <div><b>Property Sub Type:</b> {modalProperty.property_sub_type}</div>
             <div><b>Type of Title Deed:</b> {modalProperty.type_of_title_deed}</div>
             <div><b>Status of Possession:</b> {modalProperty.status_of_possession}</div>
-            <div><b>Address:</b> {modalProperty.address}</div>
+            <div><b>Address:</b> {modalProperty.ADDRESS}</div>
             <div><b>Nearest Airport/Railway/Bus:</b> {modalProperty.nearest_airport_railway_bus}</div>
             <div><b>Location:</b> {modalProperty.city}, {modalProperty.district}, {modalProperty.state}</div>
           </div>
