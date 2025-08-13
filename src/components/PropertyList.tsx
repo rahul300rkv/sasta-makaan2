@@ -33,7 +33,7 @@ interface Property {
   status_of_possession?: string;
   sealed_bid_last_date?: string;
   sealed_bid_extended_date?: string;
-  address?: string;
+  ADDRESS?: string;
   nearest_airport_railway_bus?: string;
   authorised_officer_detail?: string;
 }
