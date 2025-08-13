@@ -44,11 +44,12 @@ function parseMedia(mediaUrls?: string) {
   if (!mediaUrls) return { images: [], pdfs: [] };
   const urls = mediaUrls
     .split(",")
-    .map((u) => u.trim().replace(".in/IBAPI/", ".in/")); // clean URLs
+    .map((u) => u.trim().replace(/\.in\/[Ii][Bb][Aa][Pp][Ii]\//, ".in/")); // replace both cases
   const images = urls.filter((u) => /\.(jpg|jpeg|png|gif)$/i.test(u));
   const pdfs = urls.filter((u) => /\.pdf$/i.test(u));
   return { images, pdfs };
 }
+
 
 const PropertyCard = (props: PropertyCardProps) => {
   const phoneNumber = extractPhone(props.authorised_officer_detail);
