@@ -2,12 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://sasta-makaan2.vercel.app/</loc>
-    <priority>1.00</priority>
+    <lastmod>2025-08-13</lastmod>
     <changefreq>daily</changefreq>
+    <priority>1.00</priority>
   </url>
   <url>
     <loc>https://sasta-makaan2.vercel.app/properties</loc>
-    <priority>0.80</priority>
+    <lastmod>2025-08-13</lastmod>
     <changefreq>daily</changefreq>
+    <priority>0.80</priority>
   </url>
 </urlset>
