@@ -77,7 +77,7 @@ const HeroSection = () => {
             </span>
           </h1>
           <p className="text-lg md:text-xl text-neutral-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Discover premium bank auction properties across India at unbeatable prices
+            Discover premium bank auction properties across India 100% free
           </p>
           <form
             className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-floating border mb-4"
