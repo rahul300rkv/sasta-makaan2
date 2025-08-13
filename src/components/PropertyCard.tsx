@@ -123,22 +123,22 @@ const PropertyCard = (props: PropertyCardProps) => {
         <div className="mb-0.5 dark:text-neutral-100"><b>Auction Start:</b> {props.auction_open_date || "TBA"}</div>
         <div className="mb-1 dark:text-neutral-100"><b>Auction End:</b> {props.auction_close_date || "TBA"}</div>
 
-        {/* PDF buttons */}
-        {pdfs.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-2">
-            {pdfs.map((pdf, index) => (
-             <Button
-    key={index}
-    variant="outline"
-    size="sm"
-    className="px-3 flex items-center gap-1"
-    onClick={() => window.open(pdfUrl, "_blank")}
-  >
-    <FileText className="w-4 h-4 text-red-600" /> PDF {index + 1}
-  </Button>
-            ))}
-          </div>
-        )}
+       {pdfs.length > 0 && (
+  <div className="flex flex-wrap gap-2 mt-2">
+    {pdfs.map((pdf, index) => (
+      <Button
+        key={index}
+        variant="outline"
+        size="sm"
+        className="px-3 flex items-center gap-1"
+        onClick={() => window.open(pdf, "_blank")}
+      >
+        <FileText className="w-4 h-4 text-red-600" /> PDF {index + 1}
+      </Button>
+    ))}
+  </div>
+)}
+
       </div>
 
       <div className="p-6 pt-0 flex gap-2">
