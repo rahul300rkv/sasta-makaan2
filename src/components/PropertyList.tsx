@@ -27,7 +27,7 @@ interface PropertyCardProps {
   ADDRESS?: string;
   nearest_airport_railway_bus?: string;
   authorised_officer_detail?: string;
-  media_urls?: string; // Comma-separated URLs from Supabase
+  media_urls?: string; // new field
   onViewDetails: () => void;
 }
 
@@ -38,33 +38,38 @@ function extractPhone(authorizedOfficerDetail?: string): string | null {
   return match ? match[0] : null;
 }
 
-// Clean URLs by removing extra "ibapi/" after .in/
-function cleanMediaUrls(mediaUrls?: string): string[] {
-  if (!mediaUrls) return [];
-  return mediaUrls
+// Parse media_urls into images and PDFs
+function parseMedia(mediaUrls?: string) {
+  if (!mediaUrls) return { images: [], pdfs: [] };
+  const urls = mediaUrls
     .split(",")
-    .map((url) => url.trim().replace(".in/IBAPI/", ".in/"))
-    .filter((url) => url);
+    .map((u) => u.trim().replace(".in/IBAPI/", ".in/")); // clean URLs
+  const images = urls.filter((u) => /\.(jpg|jpeg|png|gif)$/i.test(u));
+  const pdfs = urls.filter((u) => /\.pdf$/i.test(u));
+  return { images, pdfs };
 }
 
 const PropertyCard = (props: PropertyCardProps) => {
   const phoneNumber = extractPhone(props.authorised_officer_detail);
-  const urls = cleanMediaUrls(props.media_urls);
-
-  // Separate images and PDFs
-  const images = urls.filter((u) => /\.(jpg|jpeg|png|gif)$/i.test(u));
-  const pdfs = urls.filter((u) => /\.pdf$/i.test(u));
-
+  const { images, pdfs } = parseMedia(props.media_urls);
   const [currentImage, setCurrentImage] = useState(0);
 
-  const nextImage = () => setCurrentImage((prev) => (prev + 1) % images.length);
-  const prevImage = () => setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+  const nextImage = () =>
+    setCurrentImage((prev) => (prev + 1) % images.length);
+  const prevImage = () =>
+    setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
 
   return (
     <div className="bg-white dark:bg-neutral-900 rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-neutral-200 dark:border-neutral-800 flex flex-col justify-between min-h-[320px]">
+      
+      {/* Carousel */}
       {images.length > 0 && (
         <div className="relative w-full h-48 overflow-hidden">
-          <img src={images[currentImage]} alt="Property" className="w-full h-full object-cover" />
+          <img
+            src={images[currentImage]}
+            alt="Property"
+            className="w-full h-full object-cover"
+          />
           {images.length > 1 && (
             <>
               <button
@@ -91,44 +96,34 @@ const PropertyCard = (props: PropertyCardProps) => {
             <span className="text-sm font-medium text-primary">{props.bank_name}</span>
           </div>
         </div>
-        <span
-          className="
-            absolute top-4 right-4
-            inline-block px-4 py-1
-            rounded-full
-            bg-gradient-to-r from-purple-500 via-pink-500 to-red-400
-            text-white font-bold
-            shadow-lg text-sm tracking-wider
-            border border-white/20
-            transition-all
-            dark:bg-gradient-to-r dark:from-violet-800 dark:via-pink-800 dark:to-red-600
-            dark:text-yellow-300
-          "
-        >
+
+        <span className="
+          absolute top-4 right-4
+          inline-block px-4 py-1
+          rounded-full
+          bg-gradient-to-r from-purple-500 via-pink-500 to-red-400
+          text-white font-bold
+          shadow-lg text-sm tracking-wider
+          border border-white/20
+          transition-all
+          [font-family:'Montserrat',_sans-serif]
+          dark:bg-gradient-to-r dark:from-violet-800 dark:via-pink-800 dark:to-red-600
+          dark:text-yellow-300
+        ">
           {props.property_type || "Property"}
         </span>
+
         <div className="flex items-center gap-2 mb-1 text-neutral-700 dark:text-neutral-300 text-sm">
           <MapPin className="w-4 h-4" />
-          <span>
-            {props.city}, {props.district}, {props.state}
-          </span>
+          <span>{props.city}, {props.district}, {props.state}</span>
         </div>
-        <div className="mb-0.5 dark:text-neutral-100">
-          <b>Reserve Price:</b> ₹ {props.reserve_price_rs}
-        </div>
-        <div className="mb-0.5 dark:text-neutral-100">
-          <b>EMD:</b> ₹ {props.emd_rs}
-        </div>
-        <div className="mb-0.5 dark:text-neutral-100">
-          <b>EMD Last Date:</b> {props.emd_last_date || "TBA"}
-        </div>
-        <div className="mb-0.5 dark:text-neutral-100">
-          <b>Auction Start:</b> {props.auction_open_date || "TBA"}
-        </div>
-        <div className="mb-1 dark:text-neutral-100">
-          <b>Auction End:</b> {props.auction_close_date || "TBA"}
-        </div>
+        <div className="mb-0.5 dark:text-neutral-100"><b>Reserve Price:</b> ₹ {props.reserve_price_rs}</div>
+        <div className="mb-0.5 dark:text-neutral-100"><b>EMD:</b> ₹ {props.emd_rs}</div>
+        <div className="mb-0.5 dark:text-neutral-100"><b>EMD Last Date:</b> {props.emd_last_date || "TBA"}</div>
+        <div className="mb-0.5 dark:text-neutral-100"><b>Auction Start:</b> {props.auction_open_date || "TBA"}</div>
+        <div className="mb-1 dark:text-neutral-100"><b>Auction End:</b> {props.auction_close_date || "TBA"}</div>
 
+        {/* PDF buttons */}
         {pdfs.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-2">
             {pdfs.map((pdf, idx) => (
@@ -139,8 +134,7 @@ const PropertyCard = (props: PropertyCardProps) => {
                 className="flex items-center gap-1"
                 onClick={() => window.open(pdf, "_blank")}
               >
-                <FileText className="w-4 h-4" />
-                PDF {idx + 1}
+                <FileText className="w-4 h-4" /> PDF {idx + 1}
               </Button>
             ))}
           </div>
@@ -155,9 +149,7 @@ const PropertyCard = (props: PropertyCardProps) => {
           variant="outline"
           size="sm"
           className="px-3"
-          onClick={() => {
-            if (phoneNumber) window.open(`tel:${phoneNumber}`);
-          }}
+          onClick={() => { if (phoneNumber) window.open(`tel:${phoneNumber}`); }}
           disabled={!phoneNumber}
         >
           <Phone className="w-4 h-4" />
