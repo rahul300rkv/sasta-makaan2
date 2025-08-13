@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
-import { Building, MapPin, Phone, FileText, ChevronLeft, ChevronRight } from "lucide-react";
+import { Building, MapPin, Phone, FileText } from "lucide-react";
 
 interface PropertyCardProps {
   property_id: string;
@@ -27,59 +27,62 @@ interface PropertyCardProps {
   ADDRESS?: string;
   nearest_airport_railway_bus?: string;
   authorised_officer_detail?: string;
-  media_urls?: string;
+  media_urls?: string; // new field
   onViewDetails: () => void;
 }
 
-// Extract phone number
+// Extract 10-digit phone from AO detail
 function extractPhone(authorizedOfficerDetail?: string): string | null {
   if (!authorizedOfficerDetail) return null;
   const match = authorizedOfficerDetail.match(/\b\d{10}\b/);
   return match ? match[0] : null;
 }
 
-// Parse media into images and PDFs
+// Parse media_urls into images and PDFs
 function parseMedia(mediaUrls?: string) {
   if (!mediaUrls) return { images: [], pdfs: [] };
-  const urls = mediaUrls.split(",").map(u => u.trim());
-  const images = urls.filter(u => /\.(jpg|jpeg|png|gif)$/i.test(u));
-  const pdfs = urls.filter(u => /\.pdf$/i.test(u));
+  const urls = mediaUrls
+    .split(",")
+    .map((u) => u.trim().replace(".in/IBAPI/", ".in/")); // clean URLs
+  const images = urls.filter((u) => /\.(jpg|jpeg|png|gif)$/i.test(u));
+  const pdfs = urls.filter((u) => /\.pdf$/i.test(u));
   return { images, pdfs };
 }
 
 const PropertyCard = (props: PropertyCardProps) => {
   const phoneNumber = extractPhone(props.authorised_officer_detail);
   const { images, pdfs } = parseMedia(props.media_urls);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentImage, setCurrentImage] = useState(0);
 
-  const prevImage = () => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-  const nextImage = () => setCurrentIndex((prev) => (prev + 1) % images.length);
+  const nextImage = () =>
+    setCurrentImage((prev) => (prev + 1) % images.length);
+  const prevImage = () =>
+    setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
 
   return (
-    <div className="
-      bg-white dark:bg-neutral-900 
-      rounded-xl overflow-hidden 
-      shadow-card hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 
-      border border-neutral-200 dark:border-neutral-800
-      flex flex-col justify-between min-h-[400px]
-    ">
-      {/* Image Carousel */}
+    <div className="bg-white dark:bg-neutral-900 rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-neutral-200 dark:border-neutral-800 flex flex-col justify-between min-h-[320px]">
+      
+      {/* Carousel */}
       {images.length > 0 && (
-        <div className="relative w-full h-48">
-          <img src={images[currentIndex]} alt={`Property ${currentIndex}`} className="w-full h-full object-cover" />
+        <div className="relative w-full h-48 overflow-hidden">
+          <img
+            src={images[currentImage]}
+            alt="Property"
+            className="w-full h-full object-cover"
+          />
           {images.length > 1 && (
             <>
               <button
                 onClick={prevImage}
-                className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white/50 rounded-full p-1 hover:bg-white"
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/40 text-white px-2 py-1 rounded"
               >
-                <ChevronLeft className="w-5 h-5" />
+                ‹
               </button>
               <button
                 onClick={nextImage}
-                className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white/50 rounded-full p-1 hover:bg-white"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/40 text-white px-2 py-1 rounded"
               >
-                <ChevronRight className="w-5 h-5" />
+                ›
               </button>
             </>
           )}
@@ -96,14 +99,11 @@ const PropertyCard = (props: PropertyCardProps) => {
 
         <span className="
           absolute top-4 right-4
-          inline-block
-          px-4 py-1
+          inline-block px-4 py-1
           rounded-full
           bg-gradient-to-r from-purple-500 via-pink-500 to-red-400
           text-white font-bold
-          shadow-lg
-          text-sm
-          tracking-wider
+          shadow-lg text-sm tracking-wider
           border border-white/20
           transition-all
           [font-family:'Montserrat',_sans-serif]
@@ -122,30 +122,38 @@ const PropertyCard = (props: PropertyCardProps) => {
         <div className="mb-0.5 dark:text-neutral-100"><b>EMD Last Date:</b> {props.emd_last_date || "TBA"}</div>
         <div className="mb-0.5 dark:text-neutral-100"><b>Auction Start:</b> {props.auction_open_date || "TBA"}</div>
         <div className="mb-1 dark:text-neutral-100"><b>Auction End:</b> {props.auction_close_date || "TBA"}</div>
+
+        {/* PDF buttons */}
+        {pdfs.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-2">
+            {pdfs.map((pdf, idx) => (
+              <Button
+                key={idx}
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-1"
+                onClick={() => window.open(pdf, "_blank")}
+              >
+                <FileText className="w-4 h-4" /> PDF {idx + 1}
+              </Button>
+            ))}
+          </div>
+        )}
       </div>
 
-      <div className="p-6 pt-0 flex flex-wrap gap-2">
+      <div className="p-6 pt-0 flex gap-2">
         <Button variant="outline" className="w-full" size="sm" onClick={props.onViewDetails}>
           View Details
         </Button>
-
-        {phoneNumber && (
-          <Button variant="outline" size="sm" className="px-3" onClick={() => window.open(`tel:${phoneNumber}`)}>
-            <Phone className="w-4 h-4" />
-          </Button>
-        )}
-
-        {pdfs.map((pdfUrl, index) => (
-          <Button
-            key={index}
-            variant="outline"
-            size="sm"
-            className="px-3"
-            onClick={() => window.open(pdfUrl, "_blank")}
-          >
-            <FileText className="w-4 h-4" /> PDF {index + 1}
-          </Button>
-        ))}
+        <Button
+          variant="outline"
+          size="sm"
+          className="px-3"
+          onClick={() => { if (phoneNumber) window.open(`tel:${phoneNumber}`); }}
+          disabled={!phoneNumber}
+        >
+          <Phone className="w-4 h-4" />
+        </Button>
       </div>
     </div>
   );
