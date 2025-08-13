@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 import { Building, MapPin, Phone } from "lucide-react";
+import noImage from "./nopropertyphoto.png"; // fallback image
 
 interface PropertyCardProps {
   property_id: string;
@@ -55,39 +56,37 @@ const PropertyCard = (props: PropertyCardProps) => {
   const [currentImage, setCurrentImage] = useState(0);
 
   const nextImage = () =>
-    setCurrentImage((prev) => (prev + 1) % images.length);
+    setCurrentImage((prev) => (prev + 1) % (images.length || 1));
   const prevImage = () =>
-    setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+    setCurrentImage((prev) => (prev - 1 + (images.length || 1)) % (images.length || 1));
 
   return (
     <div className="bg-white dark:bg-neutral-900 rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-neutral-200 dark:border-neutral-800 flex flex-col justify-between min-h-[320px]">
-
+      
       {/* Carousel */}
-      {images.length > 0 && (
-        <div className="relative w-full h-48 overflow-hidden">
-          <img
-            src={images[currentImage]}
-            alt="Property"
-            className="w-full h-full object-cover"
-          />
-          {images.length > 1 && (
-            <>
-              <button
-                onClick={prevImage}
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/40 text-white px-2 py-1 rounded"
-              >
-                ‹
-              </button>
-              <button
-                onClick={nextImage}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/40 text-white px-2 py-1 rounded"
-              >
-                ›
-              </button>
-            </>
-          )}
-        </div>
-      )}
+      <div className="relative w-full h-48 overflow-hidden">
+        <img
+          src={images.length > 0 ? images[currentImage] : noImage}
+          alt="Property"
+          className="w-full h-full object-cover"
+        />
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={prevImage}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/40 text-white px-2 py-1 rounded"
+            >
+              ‹
+            </button>
+            <button
+              onClick={nextImage}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/40 text-white px-2 py-1 rounded"
+            >
+              ›
+            </button>
+          </>
+        )}
+      </div>
 
       <div className="p-6 flex-1">
         <div className="flex items-center justify-between mb-3">
@@ -122,7 +121,6 @@ const PropertyCard = (props: PropertyCardProps) => {
                 className="px-3 flex items-center gap-1"
                 onClick={() => window.open(pdfUrl, "_blank")}
               >
-                {/* Acrobat-style PDF icon */}
                 <svg className="w-4 h-4 text-red-600" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                   <path d="M6 2H14L20 8V22H6V2Z"/>
                   <path d="M14 2V8H20" fill="white"/>
