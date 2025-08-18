@@ -11,9 +11,9 @@ const Index = () => {
   return (
     <>
     <Helmet>
-        <title>Property Auctions & Real Estate | Sasta Makaan</title>
+       <title>Bank Auction Properties in India – Buy Homes at 20-40% Off | Sasta Makaan</title>
       <meta name="description" content="Discover and bid on bank auction properties, flats, houses, and commercial real estate in India. Sasta Makaan makes it easy to find your dream property." />
-      <meta name="keywords" content="bank auction, property auction, real estate India, buy house, auction flats, commercial property, Sasta Makaan" />
+      <meta name="keywords" content="bank auction properties in India, bank auction, SBI e-auction homes, property under 20 lakhs in India, NPA properties for sale" />
 
       {/* Canonical URL */}
       <link rel="canonical" href="https://sasta-makaan2.vercel.app/" />
