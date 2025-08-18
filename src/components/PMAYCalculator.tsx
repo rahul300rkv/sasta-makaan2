@@ -1,15 +1,26 @@
 import React, { useState } from 'react';
 
+const categoryInterestRates = {
+  EWS: 6.5,
+  LIG: 6.5,
+  'MIG-I': 4.0,
+  'MIG-II': 3.0
+};
+
 const PMAYCalculator = ({ show, onClose }) => {
   const [income, setIncome] = useState('');
   const [loanAmount, setLoanAmount] = useState('');
-  const [interestRate, setInterestRate] = useState('');
+  const [interestRate, setInterestRate] = useState(categoryInterestRates['EWS']);
   const [tenure, setTenure] = useState('');
   const [category, setCategory] = useState('EWS');
   const [subsidy, setSubsidy] = useState(null);
 
+  const handleCategoryChange = (value) => {
+    setCategory(value);
+    setInterestRate(categoryInterestRates[value]);
+  };
+
   const handleCalculate = () => {
-    // Demo logic for category-based subsidy; replace with official calculation
     let maxLoan = 0, subsidyRate = 0, maxSubsidy = 0;
     switch(category) {
       case 'EWS': case 'LIG':
@@ -18,7 +29,8 @@ const PMAYCalculator = ({ show, onClose }) => {
         maxLoan = 900000; subsidyRate = 4.0; maxSubsidy = 235068; break;
       case 'MIG-II':
         maxLoan = 1200000; subsidyRate = 3.0; maxSubsidy = 230156; break;
-      default: return setSubsidy(null);
+      default: 
+        return setSubsidy(null);
     }
     const principal = Math.min(parseFloat(loanAmount), maxLoan);
     if (!principal || !interestRate || !tenure) return setSubsidy(null);
@@ -31,7 +43,7 @@ const PMAYCalculator = ({ show, onClose }) => {
   };
 
   if (!show) return null;
-
+  
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
@@ -42,7 +54,7 @@ const PMAYCalculator = ({ show, onClose }) => {
         <div className="space-y-3 mb-3">
           <select
             value={category}
-            onChange={e => setCategory(e.target.value)}
+            onChange={e => handleCategoryChange(e.target.value)}
             className="w-full border rounded px-2 py-1"
           >
             <option value="EWS">EWS</option>
@@ -66,10 +78,10 @@ const PMAYCalculator = ({ show, onClose }) => {
           />
           <input
             type="number"
-            className="w-full border rounded px-2 py-1"
+            className="w-full border rounded px-2 py-1 bg-gray-100"
             placeholder="Interest Rate (%)"
             value={interestRate}
-            onChange={e => setInterestRate(e.target.value)}
+            readOnly
           />
           <input
             type="number"
@@ -94,4 +106,5 @@ const PMAYCalculator = ({ show, onClose }) => {
     </div>
   );
 };
+
 export default PMAYCalculator;
