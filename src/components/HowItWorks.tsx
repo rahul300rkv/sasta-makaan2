@@ -5,8 +5,8 @@ const HowItWorks = () => {
     {
       icon: Search,
       title: "Find",
-      description: "Browse verified bank auction properties",
-      details: "Search through our curated database of properties from leading banks. Use advanced filters to find properties that match your investment criteria and budget.",
+      description: "Find verified bank auction properties in India",
+      details: "Browse homes, flats, and plots from SBI, HDFC, ICICI, and other leading banks. Buy property under 20 lakhs or get up to 40% off market price through legal, transparent auctions.",
       bgColor: "bg-primary/10",
       iconColor: "text-primary"
     },
