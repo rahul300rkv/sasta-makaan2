@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { Building2, MapPin } from "lucide-react";
 import EMICalculator from "@/components/EMICalculator";
+import PMAYCalculator from "@/components/PMAYCalculator";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [showEMI, setShowEMI] = useState(false);
+  const [showPMAY, setShowPMAY] = useState(false);
 
   const quickLinks = [
     { label: "Browse Properties", href: "#properties-list" },
     { label: "How It Works", href: "#how-it-works" },
     { label: "EMI Calculator", action: () => setShowEMI(true) }, // use action instead of href
+    { label: "PMAY Calculator", action: () => setShowPMAY(true) },
   ];
 
   return (
@@ -95,6 +98,7 @@ const Footer = () => {
         </div>
       </footer>
       <EMICalculator show={showEMI} onClose={() => setShowEMI(false)} />
+      <PMAYCalculator show={showPMAY} onClose={() => setShowPMAY(false)} />
     </>
   );
 };
